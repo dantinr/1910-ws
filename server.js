@@ -10,6 +10,13 @@ wss.on('connection', function connection(ws) {
 		console.log(t);
 		ws.send(message + " " + t);		//向客户端发送数据
 
+		//广播 向所有在线用户发送数据
+		wss.clients.forEach(function each(client) {
+			if ( client !== ws && client.readyState === WebSocket.OPEN) {
+				client.send(message + " " + t);
+			}
+		});
+
 	});
 
 });
